@@ -1,9 +1,11 @@
 package wise.military.wisemilitarylife.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -22,21 +25,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import wise.military.wisemilitarylife.R
+import wise.military.wisemilitarylife.repo.doWhen
 import wise.military.wisemilitarylife.theme.MaterialTheme
 import wise.military.wisemilitarylife.theme.SystemUiController
+import wise.military.wisemilitarylife.util.extension.toast
+import wise.military.wisemilitarylife.viewmodel.ServerViewModel
 
-class MainActivity : ComponentActivity() {
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,6 +63,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
+        val vm: ServerViewModel = viewModel()
+        val focusManager = LocalFocusManager.current
+        val focusRequester = remember { FocusRequester() }
+        val coroutineScope = rememberCoroutineScope()
         var idField by remember { mutableStateOf(TextFieldValue()) }
         var passwordField by remember { mutableStateOf(TextFieldValue()) }
         val outlineTextFieldBorderTheme = TextFieldDefaults.outlinedTextFieldColors(
@@ -77,13 +94,13 @@ class MainActivity : ComponentActivity() {
                 Image(
                     painter = painterResource(R.mipmap.ic_launcher),
                     contentDescription = null,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(70.dp)
                 )
                 Text(
                     text = stringResource(R.string.app_name),
                     color = Color.Black,
                     modifier = Modifier.padding(start = 16.dp),
-                    fontSize = 20.sp
+                    fontSize = 25.sp
                 )
             }
             Column(
@@ -99,28 +116,68 @@ class MainActivity : ComponentActivity() {
                     onValueChange = { idField = it },
                     colors = outlineTextFieldBorderTheme,
                     placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_login)) },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardActions = KeyboardActions {
+                        focusRequester.requestFocus()
+                    }
                 )
                 OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
                     value = passwordField,
                     onValueChange = { passwordField = it },
                     colors = outlineTextFieldBorderTheme,
                     visualTransformation = PasswordVisualTransformation(),
                     placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_password)) },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardActions = KeyboardActions {
+                        focusManager.clearFocus()
+                    }
                 )
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        coroutineScope.launch {
+                            val id = idField.text
+                            val password = passwordField.text
+
+                            if (id.isNotBlank() && password.isNotBlank()) {
+                                vm.getUser(id).collect { userResult ->
+                                    userResult.doWhen(
+                                        onSuccess = { users ->
+                                            if (users.isNotEmpty()) {
+                                                val user = users.first()
+                                                if (user.password == password) {
+                                                    toast("로그인 성공")
+                                                } else {
+                                                    toast("비밀번호가 일치하지 않습니다.")
+                                                }
+                                            } else {
+                                                toast("존재하지 않는 아이디 입니다.")
+                                            }
+                                        },
+                                        onFail = { exception ->
+                                            toast("로그인 오류: ${exception.message}")
+                                        }
+                                    )
+                                }
+                            } else {
+                                toast("모두 다 입력해 주세요.")
+                            }
+                        }
+                    }
                 ) {
                     Text(text = stringResource(R.string.activity_main_button_login))
                 }
                 Text(
                     text = stringResource(R.string.activity_main_button_register),
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.clickable {
+                        startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                    }
                 )
             }
         }
