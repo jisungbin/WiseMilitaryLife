@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.theme
+package wise.military.life.theme
 
 import android.os.Build
 import android.view.View

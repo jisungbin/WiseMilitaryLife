@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.theme
+package wise.military.life.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors

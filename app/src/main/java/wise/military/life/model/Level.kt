@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.model
+package wise.military.life.model
 
 object Level {
     const val One = 0 // 일병

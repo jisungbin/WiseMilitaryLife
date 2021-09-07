@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.repo
+package wise.military.life.repo
 
 sealed class ServerResult<out T> {
     data class Success<T>(val response: T) : ServerResult<T>()

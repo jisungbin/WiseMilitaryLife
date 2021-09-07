@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.model
+package wise.military.life.model
 
 import kotlin.random.Random
 

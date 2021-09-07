@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.activity
+package wise.military.life.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,9 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import wise.military.wisemilitarylife.R
-import wise.military.wisemilitarylife.theme.MaterialTheme
-import wise.military.wisemilitarylife.util.extension.toast
+import wise.military.life.R
+import wise.military.life.theme.MaterialTheme
+import wise.military.life.util.extension.toast
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

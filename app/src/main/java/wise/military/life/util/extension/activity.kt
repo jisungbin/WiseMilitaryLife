@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.util.extension
+package wise.military.life.util.extension
 
 import android.app.Activity
 import android.widget.Toast

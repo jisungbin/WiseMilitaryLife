@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.viewmodel
+package wise.military.life.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
@@ -7,9 +7,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import wise.military.wisemilitarylife.model.User
-import wise.military.wisemilitarylife.repo.ServerResult
-import wise.military.wisemilitarylife.repo.doWhen
+import wise.military.life.model.User
+import wise.military.life.repo.ServerResult
+import wise.military.life.repo.doWhen
 
 class ServerViewModel : ViewModel() {
     private val firestore = Firebase.firestore

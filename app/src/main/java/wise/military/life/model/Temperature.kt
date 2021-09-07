@@ -1,4 +1,4 @@
-package wise.military.wisemilitarylife.model
+package wise.military.life.model
 
 data class Temperature(
     val userId: String = "",
