@@ -46,7 +46,6 @@ import kotlinx.coroutines.launch
 import wise.military.wisemilitarylife.R
 import wise.military.wisemilitarylife.repo.doWhen
 import wise.military.wisemilitarylife.theme.MaterialTheme
-import wise.military.wisemilitarylife.theme.SystemUiController
 import wise.military.wisemilitarylife.util.config.IntentConfig
 import wise.military.wisemilitarylife.util.extension.toast
 import wise.military.wisemilitarylife.viewmodel.ServerViewModel
@@ -55,7 +54,6 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SystemUiController(window).setSystemBarsColor(Color.White)
         setContent {
             MaterialTheme {
                 Content()
@@ -157,7 +155,7 @@ class LoginActivity : ComponentActivity() {
                                                     startActivity(
                                                         Intent(
                                                             this@LoginActivity,
-                                                            RegisterActivity::class.java
+                                                            MainActivity::class.java
                                                         ).apply {
                                                             putExtra(IntentConfig.UserId, user.id)
                                                         }

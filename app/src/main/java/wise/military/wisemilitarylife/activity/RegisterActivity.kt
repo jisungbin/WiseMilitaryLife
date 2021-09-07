@@ -56,7 +56,6 @@ import wise.military.wisemilitarylife.model.User
 import wise.military.wisemilitarylife.model.toLevelString
 import wise.military.wisemilitarylife.repo.doWhen
 import wise.military.wisemilitarylife.theme.MaterialTheme
-import wise.military.wisemilitarylife.theme.SystemUiController
 import wise.military.wisemilitarylife.util.config.IntentConfig
 import wise.military.wisemilitarylife.util.extension.toast
 import wise.military.wisemilitarylife.viewmodel.ServerViewModel
@@ -65,7 +64,6 @@ class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SystemUiController(window).setSystemBarsColor(Color.White)
         setContent {
             MaterialTheme {
                 Content()
@@ -224,11 +222,11 @@ class RegisterActivity : ComponentActivity() {
                                 ).collect { registerResult ->
                                     registerResult.doWhen(
                                         onSuccess = {
-                                            finish()
+                                            finishAffinity()
                                             startActivity(
                                                 Intent(
                                                     this@RegisterActivity,
-                                                    RegisterActivity::class.java
+                                                    MainActivity::class.java
                                                 ).apply {
                                                     putExtra(IntentConfig.UserId, id)
                                                 }

@@ -5,8 +5,8 @@
     <string name="activity_login_placeholder_password">비밀번호</string>
     <string name="activity_login_button_login">로그인</string>
     <string name="activity_login_button_register">회원가입</string>
-    <string name="activity_main_toast_welcome">환영합니다 :)</string>
-    <string name="activity_login_toast_error">로그인중에 오류가 발생했어요 :(\n\n%s</string>
+    <string name="activity_login_toast_welcome">환영합니다 😄</string>
+    <string name="activity_login_toast_error">로그인중에 오류가 발생했어요 😓\n\n%s</string>
     <string name="activity_login_toast_confirm_password">비밀번호가 일치하지 않아요</string>
     <string name="activity_login_toast_non_exist_id">존재하지 않는 아이디에요</string>
     <string name="activity_login_toast_confirm_all_filed">모두 다 입력해 주세요.</string>
@@ -14,4 +14,8 @@
     <string name="activity_register_toast_error">가입중에 오류가 발생했어요 :(\n\n%s</string>
     <string name="activity_register_button_label">가입하기</string>
     <string name="activity_register_placeholder_age">나이</string>
+    <string name="activity_main_button_check_temperature">체온 체크</string>
+    <string name="activity_main_button_check_vaccine">백신 여부</string>
+    <string name="activity_main_button_notice">공지사항</string>
+    <string name="activity_main_button_logout">로그아웃</string>
 </resources>
