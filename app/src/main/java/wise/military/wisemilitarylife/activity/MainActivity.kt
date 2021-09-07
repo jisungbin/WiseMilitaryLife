@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                     value = idField,
                     onValueChange = { idField = it },
                     colors = outlineTextFieldBorderTheme,
-                    placeholder = { Text(text = "아이디") },
+                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_login)) },
                     singleLine = true
                 )
                 OutlinedTextField(
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                     onValueChange = { passwordField = it },
                     colors = outlineTextFieldBorderTheme,
                     visualTransformation = PasswordVisualTransformation(),
-                    placeholder = { Text(text = "비밀번호") },
+                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_password)) },
                     singleLine = true
                 )
                 Button(
@@ -116,9 +116,12 @@ class MainActivity : ComponentActivity() {
                         .height(50.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    Text(text = "로그인")
+                    Text(text = stringResource(R.string.activity_main_button_login))
                 }
-                Text(text = "회원가입", color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.activity_main_button_register),
+                    color = Color.Gray
+                )
             }
         }
     }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">슬기로운 병영생활</string>
+
+    <string name="activity_main_placeholder_login">아이디</string>
+    <string name="activity_main_placeholder_password">비밀번호</string>
+    <string name="activity_main_button_login">로그인</string>
+    <string name="activity_main_button_register">회원가입</string>
 </resources>
