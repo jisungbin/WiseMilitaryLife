@@ -7,6 +7,7 @@
 /captures
 .externalNativeBuild
 /app/build
+/app/release
 .cxx
 local.properties
 /app/google-services.json
