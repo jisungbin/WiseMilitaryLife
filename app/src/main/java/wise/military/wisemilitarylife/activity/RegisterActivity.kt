@@ -1,5 +1,6 @@
 package wise.military.wisemilitarylife.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -56,6 +57,7 @@ import wise.military.wisemilitarylife.model.toLevelString
 import wise.military.wisemilitarylife.repo.doWhen
 import wise.military.wisemilitarylife.theme.MaterialTheme
 import wise.military.wisemilitarylife.theme.SystemUiController
+import wise.military.wisemilitarylife.util.config.IntentConfig
 import wise.military.wisemilitarylife.util.extension.toast
 import wise.military.wisemilitarylife.viewmodel.ServerViewModel
 
@@ -223,7 +225,14 @@ class RegisterActivity : ComponentActivity() {
                                     registerResult.doWhen(
                                         onSuccess = {
                                             finish()
-                                            toast(getString(R.string.activity_login_toast_welcome))
+                                            startActivity(
+                                                Intent(
+                                                    this@RegisterActivity,
+                                                    RegisterActivity::class.java
+                                                ).apply {
+                                                    putExtra(IntentConfig.UserId, id)
+                                                }
+                                            )
                                         },
                                         onFail = { exception ->
                                             toast(

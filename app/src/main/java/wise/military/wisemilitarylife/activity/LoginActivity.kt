@@ -47,6 +47,7 @@ import wise.military.wisemilitarylife.R
 import wise.military.wisemilitarylife.repo.doWhen
 import wise.military.wisemilitarylife.theme.MaterialTheme
 import wise.military.wisemilitarylife.theme.SystemUiController
+import wise.military.wisemilitarylife.util.config.IntentConfig
 import wise.military.wisemilitarylife.util.extension.toast
 import wise.military.wisemilitarylife.viewmodel.ServerViewModel
 
@@ -152,7 +153,15 @@ class LoginActivity : ComponentActivity() {
                                             if (users.isNotEmpty()) {
                                                 val user = users.first()
                                                 if (user.password == password) {
-                                                    toast(getString(R.string.activity_login_toast_welcome))
+                                                    finish()
+                                                    startActivity(
+                                                        Intent(
+                                                            this@LoginActivity,
+                                                            RegisterActivity::class.java
+                                                        ).apply {
+                                                            putExtra(IntentConfig.UserId, user.id)
+                                                        }
+                                                    )
                                                 } else {
                                                     toast(getString(R.string.activity_login_toast_confirm_password))
                                                 }

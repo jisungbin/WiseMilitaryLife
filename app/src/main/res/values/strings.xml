@@ -5,7 +5,7 @@
     <string name="activity_login_placeholder_password">비밀번호</string>
     <string name="activity_login_button_login">로그인</string>
     <string name="activity_login_button_register">회원가입</string>
-    <string name="activity_login_toast_welcome">환영합니다 :)</string>
+    <string name="activity_main_toast_welcome">환영합니다 :)</string>
     <string name="activity_login_toast_error">로그인중에 오류가 발생했어요 :(\n\n%s</string>
     <string name="activity_login_toast_confirm_password">비밀번호가 일치하지 않아요</string>
     <string name="activity_login_toast_non_exist_id">존재하지 않는 아이디에요</string>
