@@ -2,6 +2,7 @@ package wise.military.wisemilitarylife.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -115,7 +116,7 @@ class LoginActivity : ComponentActivity() {
                     value = idField,
                     onValueChange = { idField = it },
                     colors = outlineTextFieldBorderTheme,
-                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_login)) },
+                    placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_login)) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
                         focusRequester.requestFocus()
@@ -129,7 +130,7 @@ class LoginActivity : ComponentActivity() {
                     onValueChange = { passwordField = it },
                     colors = outlineTextFieldBorderTheme,
                     visualTransformation = PasswordVisualTransformation(),
-                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_password)) },
+                    placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_password)) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
@@ -151,29 +152,35 @@ class LoginActivity : ComponentActivity() {
                                             if (users.isNotEmpty()) {
                                                 val user = users.first()
                                                 if (user.password == password) {
-                                                    toast("로그인 성공")
+                                                    toast(getString(R.string.activity_login_toast_welcome))
                                                 } else {
-                                                    toast("비밀번호가 일치하지 않습니다.")
+                                                    toast(getString(R.string.activity_login_toast_confirm_password))
                                                 }
                                             } else {
-                                                toast("존재하지 않는 아이디 입니다.")
+                                                toast(getString(R.string.activity_login_toast_non_exist_id))
                                             }
                                         },
                                         onFail = { exception ->
-                                            toast("로그인 오류: ${exception.message}")
+                                            toast(
+                                                message = getString(
+                                                    R.string.activity_login_toast_error,
+                                                    exception.message ?: "오류를 불러올 수 없어요"
+                                                ),
+                                                length = Toast.LENGTH_LONG
+                                            )
                                         }
                                     )
                                 }
                             } else {
-                                toast("모두 다 입력해 주세요.")
+                                toast(getString(R.string.activity_login_toast_confirm_all_filed))
                             }
                         }
                     }
                 ) {
-                    Text(text = stringResource(R.string.activity_main_button_login))
+                    Text(text = stringResource(R.string.activity_login_button_login))
                 }
                 Text(
-                    text = stringResource(R.string.activity_main_button_register),
+                    text = stringResource(R.string.activity_login_button_register),
                     color = Color.Gray,
                     modifier = Modifier.clickable {
                         startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))

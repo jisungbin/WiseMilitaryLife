@@ -1,6 +1,7 @@
 package wise.military.wisemilitarylife.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -111,7 +112,7 @@ class RegisterActivity : ComponentActivity() {
                     modifier = Modifier.size(70.dp)
                 )
                 Text(
-                    text = "회원가입",
+                    text = stringResource(R.string.activity_login_button_register),
                     color = Color.Black,
                     modifier = Modifier.padding(start = 16.dp),
                     fontSize = 35.sp
@@ -129,7 +130,7 @@ class RegisterActivity : ComponentActivity() {
                     value = idField,
                     onValueChange = { idField = it },
                     colors = outlineTextFieldBorderTheme,
-                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_login)) },
+                    placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_login)) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
                         passwordFocusRequester.requestFocus()
@@ -143,7 +144,7 @@ class RegisterActivity : ComponentActivity() {
                     onValueChange = { passwordField = it },
                     colors = outlineTextFieldBorderTheme,
                     visualTransformation = PasswordVisualTransformation(),
-                    placeholder = { Text(text = stringResource(R.string.activity_main_placeholder_password)) },
+                    placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_password)) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
                         ageFocusRequester.requestFocus()
@@ -161,7 +162,7 @@ class RegisterActivity : ComponentActivity() {
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = outlineTextFieldBorderTheme,
-                    placeholder = { Text(text = "나이") },
+                    placeholder = { Text(text = stringResource(R.string.activity_register_placeholder_age)) },
                     singleLine = true,
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
@@ -222,20 +223,26 @@ class RegisterActivity : ComponentActivity() {
                                     registerResult.doWhen(
                                         onSuccess = {
                                             finish()
-                                            toast("가입 성공")
+                                            toast(getString(R.string.activity_login_toast_welcome))
                                         },
                                         onFail = { exception ->
-                                            toast("가입중 오류가 발생했습니다.\n\n${exception.message}")
+                                            toast(
+                                                message = getString(
+                                                    R.string.activity_register_toast_error,
+                                                    exception.message ?: "오류를 불러올 수 없어요"
+                                                ),
+                                                length = Toast.LENGTH_LONG
+                                            )
                                         }
                                     )
                                 }
                             } else {
-                                toast("모두 다 입력해 주세요.")
+                                toast(getString(R.string.activity_login_toast_confirm_all_filed))
                             }
                         }
                     }
                 ) {
-                    Text(text = "가입하기")
+                    Text(text = stringResource(R.string.activity_register_button_label))
                 }
             }
         }
