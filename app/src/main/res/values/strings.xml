@@ -25,7 +25,10 @@
     <string name="activity_check_temp_icon">°C</string>
     <string name="activity_check_temp_button_done">완료</string>
     <string name="activity_check_temp_placeholder_365">36.5</string>
-    <string name="activity_check_temp_toast_confirm_temp">체온을 정확히 입력해 주세요</string>
-    <string name="activity_check_temp_toast_upload_temp">체온 등록이 되었어요</string>
+    <string name="activity_check_temp_toast_confirm">체온을 정확히 입력해 주세요</string>
+    <string name="activity_check_temp_toast_uploaded">체온 등록이 되었어요 😊</string>
     <string name="activity_check_temp_toast_error">등록중에 오류가 발생했어요 😓\n\n%s</string>
+
+    <string name="activity_check_vaccine_toast_uploaded">백신 여부 등록이 되었어요 😊</string>
+    <string name="activity_check_vaccine_toast_confirm_all_field">모두 선택해 주세요</string>
 </resources>

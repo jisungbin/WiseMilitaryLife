@@ -40,10 +40,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import wise.military.life.R
+import wise.military.life.model.Vaccine
 import wise.military.life.model.toVaccineString
+import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
+import wise.military.life.util.config.IntentConfig
+import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.toast
 import wise.military.life.viewmodel.CheckViewModel
 
 class CheckVaccineActivity : ComponentActivity() {
@@ -162,6 +168,31 @@ class CheckVaccineActivity : ComponentActivity() {
                     modifier = Modifier.height(50.dp),
                     onClick = {
                         coroutineScope.launch {
+                            if (selectedVaccineType != null && vaccineCount != null) {
+                                checkVm.vaccine(
+                                    Vaccine(
+                                        userId = intent.getStringExtra(IntentConfig.UserId)!!,
+                                        type = selectedVaccineType!!,
+                                        count = vaccineCount!!
+                                    )
+                                ).collect { tempResult ->
+                                    tempResult.doWhen(
+                                        onSuccess = {
+                                            toast(getString(R.string.activity_check_vaccine_toast_uploaded))
+                                        },
+                                        onFail = { exception ->
+                                            toast(
+                                                getString(
+                                                    R.string.activity_check_temp_toast_error,
+                                                    exception.getErrorMessage()
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            } else {
+                                toast(getString(R.string.activity_check_vaccine_toast_confirm_all_field))
+                            }
                         }
                     }
                 ) {

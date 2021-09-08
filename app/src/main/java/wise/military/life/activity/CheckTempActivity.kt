@@ -158,7 +158,7 @@ class CheckTempActivity : ComponentActivity() {
                                 ).collect { tempResult ->
                                     tempResult.doWhen(
                                         onSuccess = {
-                                            toast(getString(R.string.activity_check_temp_toast_upload_temp))
+                                            toast(getString(R.string.activity_check_temp_toast_uploaded))
                                         },
                                         onFail = { exception ->
                                             toast(
@@ -171,7 +171,7 @@ class CheckTempActivity : ComponentActivity() {
                                     )
                                 }
                             } catch (ignored: Exception) {
-                                toast(getString(R.string.activity_check_temp_toast_confirm_temp))
+                                toast(getString(R.string.activity_check_temp_toast_confirm))
                             }
                         }
                     }
