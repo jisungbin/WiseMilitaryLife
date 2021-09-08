@@ -1,9 +1,11 @@
 package wise.military.life.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -79,10 +81,10 @@ class MainActivity : ComponentActivity() {
                         width = 200.dp,
                         height = 100.dp
                     ),
-                    onClick = { /*TODO*/ }
+                    onClick = { startActivity(CheckTempActivity::class.java) }
                 ) {
                     Text(
-                        text = stringResource(R.string.activity_main_button_check_temperature),
+                        text = stringResource(R.string.activity_main_button_check_temp),
                         fontSize = 20.sp
                     )
                 }
@@ -113,8 +115,17 @@ class MainActivity : ComponentActivity() {
                 Text(
                     text = stringResource(R.string.activity_main_button_logout),
                     color = Color.Gray,
+                    modifier = Modifier.clickable {
+                        finish()
+                        startActivity(LoginActivity::class.java)
+                        toast(getString(R.string.activity_main_toast_logouted))
+                    }
                 )
             }
         }
+    }
+
+    private fun <T> startActivity(clazz: Class<T>) {
+        startActivity(Intent(this@MainActivity, clazz))
     }
 }

@@ -18,7 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -36,8 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,7 +53,7 @@ import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.toast
-import wise.military.life.viewmodel.ServerViewModel
+import wise.military.life.viewmodel.UserViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +68,13 @@ class LoginActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
-        val vm: ServerViewModel = viewModel()
+        val userVm: UserViewModel = viewModel()
         val focusManager = LocalFocusManager.current
         val focusRequester = remember { FocusRequester() }
         val coroutineScope = rememberCoroutineScope()
         var idField by remember { mutableStateOf(TextFieldValue()) }
         var passwordField by remember { mutableStateOf(TextFieldValue()) }
+        var passwordVisibility by remember { mutableStateOf(false) }
         val outlineTextFieldBorderTheme = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
             disabledTextColor = Color.Gray,
@@ -78,6 +84,7 @@ class LoginActivity : ComponentActivity() {
             unfocusedBorderColor = Color.LightGray,
             disabledBorderColor = Color.LightGray,
         )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,6 +124,7 @@ class LoginActivity : ComponentActivity() {
                     colors = outlineTextFieldBorderTheme,
                     placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_login)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions {
                         focusRequester.requestFocus()
                     }
@@ -128,9 +136,21 @@ class LoginActivity : ComponentActivity() {
                     value = passwordField,
                     onValueChange = { passwordField = it },
                     colors = outlineTextFieldBorderTheme,
-                    visualTransformation = PasswordVisualTransformation(),
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                painter = painterResource(
+                                    if (passwordVisibility) R.drawable.ic_round_visibility_off_24
+                                    else R.drawable.ic_round_visibility_24
+                                ),
+                                contentDescription = null
+                            )
+                        }
+                    },
                     placeholder = { Text(text = stringResource(R.string.activity_login_placeholder_password)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     }
@@ -145,7 +165,7 @@ class LoginActivity : ComponentActivity() {
                             val password = passwordField.text
 
                             if (id.isNotBlank() && password.isNotBlank()) {
-                                vm.getUser(id).collect { userResult ->
+                                userVm.get(id).collect { userResult ->
                                     userResult.doWhen(
                                         onSuccess = { users ->
                                             if (users.isNotEmpty()) {

@@ -29,6 +29,10 @@
 
         <activity android:name="wise.military.life.activity.MainActivity" />
 
+        <activity
+            android:name=".activity.CheckTempActivity"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

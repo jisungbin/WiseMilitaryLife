@@ -11,11 +11,11 @@ import wise.military.life.model.User
 import wise.military.life.repo.ServerResult
 import wise.military.life.repo.doWhen
 
-class ServerViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
     private val firestore = Firebase.firestore
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getUser(id: String) = callbackFlow {
+    fun get(id: String) = callbackFlow {
         firestore.collection("users").whereEqualTo("id", id).get()
             .addOnSuccessListener { querySnapshot ->
                 val users = querySnapshot.documents.mapNotNull { it.toObject(User::class.java) }
@@ -28,7 +28,7 @@ class ServerViewModel : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun register(user: User) = callbackFlow {
-        getUser(user.id).collect { userResult ->
+        get(user.id).collect { userResult ->
             userResult.doWhen(
                 onSuccess = { users ->
                     if (users.isEmpty()) {
