@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import wise.military.life.R
 import wise.military.life.theme.MaterialTheme
+import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.toast
 
 class MainActivity : ComponentActivity() {
@@ -126,6 +127,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun <T> startActivity(clazz: Class<T>) {
-        startActivity(Intent(this@MainActivity, clazz))
+        startActivity(Intent(this@MainActivity, clazz).apply {
+            putExtra(IntentConfig.UserId, intent.getStringExtra(IntentConfig.UserId)!!)
+        })
     }
 }

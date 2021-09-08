@@ -176,11 +176,7 @@ class RegisterActivity : ComponentActivity() {
                     value = ageField,
                     onValueChange = { age ->
                         if (age.text.length < 3) {
-                            try {
-                                val intAge = age.text.toInt()
-                                ageField = age
-                            } catch (ignored: Exception) {
-                            }
+                            ageField = age
                         }
                     },
                     keyboardOptions = KeyboardOptions(
@@ -230,47 +226,48 @@ class RegisterActivity : ComponentActivity() {
                         .height(50.dp),
                     onClick = {
                         coroutineScope.launch {
-                            val id = idField.text
-                            val password = passwordField.text
-                            val age = ageField.text
+                            try {
+                                val id = idField.text
+                                val password = passwordField.text
+                                val age = ageField.text.toInt()
 
-                            if (
-                                id.isNotBlank() && password.isNotBlank() &&
-                                age.isNotBlank() && selectedLevel != null
-                            ) {
-                                userVm.register(
-                                    User(
-                                        id = id,
-                                        password = password,
-                                        age = age.toInt(),
-                                        level = selectedLevel!!
-                                    )
-                                ).collect { registerResult ->
-                                    registerResult.doWhen(
-                                        onSuccess = {
-                                            finishAffinity()
-                                            startActivity(
-                                                Intent(
-                                                    this@RegisterActivity,
-                                                    MainActivity::class.java
-                                                ).apply {
-                                                    putExtra(IntentConfig.UserId, id)
-                                                }
-                                            )
-                                        },
-                                        onFail = { exception ->
-                                            toast(
-                                                message = getString(
-                                                    R.string.activity_register_toast_error,
-                                                    exception.getErrorMessage()
-                                                ),
-                                                length = Toast.LENGTH_LONG
-                                            )
-                                        }
-                                    )
+                                if (id.isNotBlank() && password.isNotBlank() && selectedLevel != null) {
+                                    userVm.register(
+                                        User(
+                                            id = id,
+                                            password = password,
+                                            age = age,
+                                            level = selectedLevel!!
+                                        )
+                                    ).collect { registerResult ->
+                                        registerResult.doWhen(
+                                            onSuccess = {
+                                                finishAffinity()
+                                                startActivity(
+                                                    Intent(
+                                                        this@RegisterActivity,
+                                                        MainActivity::class.java
+                                                    ).apply {
+                                                        putExtra(IntentConfig.UserId, id)
+                                                    }
+                                                )
+                                            },
+                                            onFail = { exception ->
+                                                toast(
+                                                    message = getString(
+                                                        R.string.activity_register_toast_error,
+                                                        exception.getErrorMessage()
+                                                    ),
+                                                    length = Toast.LENGTH_LONG
+                                                )
+                                            }
+                                        )
+                                    }
+                                } else {
+                                    toast(getString(R.string.activity_login_toast_confirm_all_filed))
                                 }
-                            } else {
-                                toast(getString(R.string.activity_login_toast_confirm_all_filed))
+                            } catch (ignored: Exception) {
+                                toast(getString(R.string.activity_register_toast_confirm_age))
                             }
                         }
                     }

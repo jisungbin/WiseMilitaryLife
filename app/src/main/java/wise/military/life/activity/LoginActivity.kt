@@ -178,7 +178,10 @@ class LoginActivity : ComponentActivity() {
                                                             this@LoginActivity,
                                                             MainActivity::class.java
                                                         ).apply {
-                                                            putExtra(IntentConfig.UserId, user.id)
+                                                            putExtra(
+                                                                IntentConfig.UserId,
+                                                                user.id
+                                                            )
                                                         }
                                                     )
                                                 } else {

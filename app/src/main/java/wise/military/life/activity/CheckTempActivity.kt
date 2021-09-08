@@ -123,11 +123,7 @@ class CheckTempActivity : ComponentActivity() {
                         value = tempField,
                         onValueChange = { temp ->
                             if (temp.text.length < 5) {
-                                try {
-                                    val floatTemp = temp.text.toFloat()
-                                    tempField = temp
-                                } catch (ignored: Exception) {
-                                }
+                                tempField = temp
                             }
                         },
                         colors = outlineTextFieldBorderTheme,
@@ -151,13 +147,13 @@ class CheckTempActivity : ComponentActivity() {
                 Button(
                     modifier = Modifier.height(50.dp),
                     onClick = {
-                        val temp = tempField.text
-                        if (temp.isNotBlank()) {
-                            coroutineScope.launch {
+                        coroutineScope.launch {
+                            try {
+                                val temp = tempField.text.toFloat()
                                 checkVm.temperature(
                                     Temperature(
                                         userId = intent.getStringExtra(IntentConfig.UserId)!!,
-                                        temp = tempField.text.toFloat()
+                                        temp = temp
                                     )
                                 ).collect { tempResult ->
                                     tempResult.doWhen(
@@ -174,9 +170,9 @@ class CheckTempActivity : ComponentActivity() {
                                         }
                                     )
                                 }
+                            } catch (ignored: Exception) {
+                                toast(getString(R.string.activity_check_temp_toast_confirm_temp))
                             }
-                        } else {
-                            toast(getString(R.string.activity_check_temp_toast_confirm_temp))
                         }
                     }
                 ) {
