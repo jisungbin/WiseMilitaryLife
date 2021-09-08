@@ -8,7 +8,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import wise.military.life.model.User
-import wise.military.life.repo.ServerResult
+import wise.military.life.repo.FirebaseResult
 import wise.military.life.repo.doWhen
 
 class UserViewModel : ViewModel() {
@@ -19,9 +19,9 @@ class UserViewModel : ViewModel() {
         firestore.collection("users").whereEqualTo("id", id).get()
             .addOnSuccessListener { querySnapshot ->
                 val users = querySnapshot.documents.mapNotNull { it.toObject(User::class.java) }
-                trySend(ServerResult.Success(users))
+                trySend(FirebaseResult.Success(users))
             }
-            .addOnFailureListener { trySend(ServerResult.Fail(it)) }
+            .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
 
         awaitClose { close() }
     }
@@ -33,10 +33,10 @@ class UserViewModel : ViewModel() {
                 onSuccess = { users ->
                     if (users.isEmpty()) {
                         firestore.collection("users").add(user)
-                            .addOnSuccessListener { trySend(ServerResult.Success(Unit)) }
-                            .addOnFailureListener { trySend(ServerResult.Fail(it)) }
+                            .addOnSuccessListener { trySend(FirebaseResult.Success(Unit)) }
+                            .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
                     } else {
-                        trySend(ServerResult.Fail(Exception("이미 가입된 아이디가 있습니다.")))
+                        trySend(FirebaseResult.Fail(Exception("이미 가입된 아이디가 있어요")))
                     }
                 }
             )

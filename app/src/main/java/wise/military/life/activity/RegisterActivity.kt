@@ -61,6 +61,7 @@ import wise.military.life.model.toLevelString
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
+import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
 import wise.military.life.viewmodel.UserViewModel
 
@@ -261,7 +262,7 @@ class RegisterActivity : ComponentActivity() {
                                             toast(
                                                 message = getString(
                                                     R.string.activity_register_toast_error,
-                                                    exception.message ?: "오류를 불러올 수 없어요"
+                                                    exception.getErrorMessage()
                                                 ),
                                                 length = Toast.LENGTH_LONG
                                             )

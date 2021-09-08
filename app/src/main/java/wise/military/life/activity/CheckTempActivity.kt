@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +42,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import wise.military.life.R
+import wise.military.life.model.Temperature
+import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
+import wise.military.life.util.config.IntentConfig
+import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
 import wise.military.life.viewmodel.CheckViewModel
 
@@ -61,6 +68,7 @@ class CheckTempActivity : ComponentActivity() {
     private fun Content() {
         val checkVm: CheckViewModel = viewModel()
         val focusManager = LocalFocusManager.current
+        val coroutineScope = rememberCoroutineScope()
         var tempField by remember { mutableStateOf(TextFieldValue()) }
         val outlineTextFieldBorderTheme = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
@@ -145,7 +153,28 @@ class CheckTempActivity : ComponentActivity() {
                     onClick = {
                         val temp = tempField.text
                         if (temp.isNotBlank()) {
-                            checkVm.temp()
+                            coroutineScope.launch {
+                                checkVm.temperature(
+                                    Temperature(
+                                        userId = intent.getStringExtra(IntentConfig.UserId)!!,
+                                        temp = tempField.text.toFloat()
+                                    )
+                                ).collect { tempResult ->
+                                    tempResult.doWhen(
+                                        onSuccess = {
+                                            toast(getString(R.string.activity_check_temp_toast_upload_temp))
+                                        },
+                                        onFail = { exception ->
+                                            toast(
+                                                getString(
+                                                    R.string.activity_check_temp_toast_error,
+                                                    exception.getErrorMessage()
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
                         } else {
                             toast(getString(R.string.activity_check_temp_toast_confirm_temp))
                         }
