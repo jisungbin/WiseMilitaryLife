@@ -1,4 +1,4 @@
-package wise.military.life.activity
+package wise.military.life.activity.check
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,8 +47,8 @@ import wise.military.life.model.Vaccine
 import wise.military.life.model.toVaccineString
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
-import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.getUserId
 import wise.military.life.util.extension.toast
 import wise.military.life.viewmodel.CheckViewModel
 
@@ -171,7 +171,7 @@ class CheckVaccineActivity : ComponentActivity() {
                             if (selectedVaccineType != null && vaccineCount != null) {
                                 checkVm.vaccine(
                                     Vaccine(
-                                        userId = intent.getStringExtra(IntentConfig.UserId)!!,
+                                        userId = intent.getUserId(),
                                         type = selectedVaccineType!!,
                                         count = vaccineCount!!
                                     )

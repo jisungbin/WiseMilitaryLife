@@ -14,7 +14,7 @@
         android:theme="@style/Theme.WiseMilitaryLife">
 
         <activity
-            android:name="wise.military.life.activity.LoginActivity"
+            android:name="wise.military.life.activity.user.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -24,15 +24,21 @@
         </activity>
 
         <activity
-            android:name="wise.military.life.activity.RegisterActivity"
+            android:name="wise.military.life.activity.user.RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".activity.CheckTempActivity"
+            android:name=".activity.check.CheckTempActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activity.CheckVaccineActivity" />
+        <activity
+            android:name="wise.military.life.activity.notice.NoticeActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".activity.check.CheckVaccineActivity" />
         <activity android:name="wise.military.life.activity.MainActivity" />
+        <activity android:name="wise.military.life.activity.notice.NoticeAddActivity" />
+        <activity android:name="wise.military.life.activity.notice.NoticeViewActivity" />
 
     </application>
 

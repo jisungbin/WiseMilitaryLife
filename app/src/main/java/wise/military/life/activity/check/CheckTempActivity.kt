@@ -1,4 +1,4 @@
-package wise.military.life.activity
+package wise.military.life.activity.check
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -48,8 +48,8 @@ import wise.military.life.R
 import wise.military.life.model.Temperature
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
-import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.getUserId
 import wise.military.life.util.extension.toast
 import wise.military.life.viewmodel.CheckViewModel
 
@@ -110,7 +110,7 @@ class CheckTempActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+                verticalArrangement = Arrangement.spacedBy(30.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -152,7 +152,7 @@ class CheckTempActivity : ComponentActivity() {
                                 val temp = tempField.text.toFloat()
                                 checkVm.temperature(
                                     Temperature(
-                                        userId = intent.getStringExtra(IntentConfig.UserId)!!,
+                                        userId = intent.getUserId(),
                                         temp = temp
                                     )
                                 ).collect { tempResult ->

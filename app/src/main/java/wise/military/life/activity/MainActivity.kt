@@ -26,6 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import wise.military.life.R
+import wise.military.life.activity.check.CheckTempActivity
+import wise.military.life.activity.check.CheckVaccineActivity
+import wise.military.life.activity.notice.NoticeActivity
+import wise.military.life.activity.user.LoginActivity
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.toast
@@ -106,7 +110,7 @@ class MainActivity : ComponentActivity() {
                         width = 200.dp,
                         height = 100.dp
                     ),
-                    onClick = { /*TODO*/ }
+                    onClick = { startActivity(NoticeActivity::class.java) }
                 ) {
                     Text(
                         text = stringResource(R.string.activity_main_button_notice),

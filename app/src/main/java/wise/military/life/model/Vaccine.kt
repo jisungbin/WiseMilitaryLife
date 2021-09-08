@@ -4,6 +4,7 @@ data class Vaccine(
     val userId: String = "",
     val type: Int = 0, // 백신 종류
     val count: Int = 0, // 접종 휫수
+    val checkAt: String = "",
 )
 
 fun Int.toVaccineString() = when (this) {

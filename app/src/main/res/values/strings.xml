@@ -31,4 +31,7 @@
 
     <string name="activity_check_vaccine_toast_uploaded">백신 여부 등록이 되었어요 😊</string>
     <string name="activity_check_vaccine_toast_confirm_all_field">모두 선택해 주세요</string>
+
+    <string name="activity_notice_toast_error">공지를 불러오는 중에 오류가 발생했어요 😓\n\n%s</string>
+    <string name="activity_notice_add_toast_error">공지를 등록하는 중에 오류가 발생했어요 😓\n\n%s</string>
 </resources>
