@@ -50,7 +50,6 @@ import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.getUserId
 import wise.military.life.util.extension.toast
-import wise.military.life.viewmodel.CheckViewModel
 
 class CheckVaccineActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

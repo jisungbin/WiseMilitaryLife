@@ -1,4 +1,4 @@
-package wise.military.life.viewmodel
+package wise.military.life.activity.notice
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.Query
@@ -33,6 +33,19 @@ class NoticeViewModel : ViewModel() {
             .addOnSuccessListener { querySnapshot ->
                 val notices = querySnapshot.documents.mapNotNull { it.toObject(Notice::class.java) }
                 trySend(FirebaseResult.Success(notices))
+            }
+            .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
+
+        awaitClose { close() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun delete(id: Int) = callbackFlow {
+        firestore.collection("notice").whereEqualTo("id", id).get()
+            .addOnSuccessListener { querySnapshot ->
+                querySnapshot.documents.first().reference.delete()
+                    .addOnSuccessListener { trySend(FirebaseResult.Success(Unit)) }
+                    .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
             }
             .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
 

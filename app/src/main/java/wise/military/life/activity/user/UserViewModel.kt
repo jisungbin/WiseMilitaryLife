@@ -1,4 +1,4 @@
-package wise.military.life.viewmodel
+package wise.military.life.activity.user
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore

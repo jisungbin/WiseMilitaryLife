@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,20 +35,20 @@ class NoticeViewActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                 text = intent.getStringExtra(IntentConfig.NoticeTitle)!!,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 8.dp, end = 16.dp),
                 textAlign = TextAlign.End,
                 text = intent.getStringExtra(IntentConfig.NoticeTime)!!,
                 color = Color.LightGray,
@@ -53,7 +56,10 @@ class NoticeViewActivity : ComponentActivity() {
             )
             Divider(modifier = Modifier.fillMaxWidth())
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(PaddingValues(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)),
                 text = intent.getStringExtra(IntentConfig.NoticeContent)!!,
                 color = Color.Black,
                 fontSize = 15.sp

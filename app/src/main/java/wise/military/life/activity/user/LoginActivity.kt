@@ -55,7 +55,6 @@ import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
-import wise.military.life.viewmodel.UserViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

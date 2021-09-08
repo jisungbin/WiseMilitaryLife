@@ -38,7 +38,6 @@ import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
-import wise.military.life.viewmodel.NoticeViewModel
 import kotlin.random.Random
 
 class NoticeAddActivity : ComponentActivity() {

@@ -36,7 +36,7 @@
     <string name="activity_notice_empty">공지가 비었어요 😢</string>
 
     <string name="activity_notice_add_toast_error">공지를 등록하는 중에 오류가 발생했어요 😓\n\n%s</string>
-    <string name="activity_notice_add_toast_success_post">공지 등록 성공!</string>
+    <string name="activity_notice_add_toast_success_post">공지 등록 성공!\n위에서 아래로 스와이프하여 공지를 새로고침 해주세요</string>
     <string name="activity_notice_add_toast_confirm_all_fields">모두 입력해 주세요</string>
     <string name="activity_notice_add_placeholder_title">제목…</string>
     <string name="activity_notice_add_placeholder_content">본문…</string>
