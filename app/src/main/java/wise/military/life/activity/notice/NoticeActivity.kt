@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,9 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -91,7 +94,11 @@ class NoticeActivity : ComponentActivity() {
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
             if (notices.isNotEmpty()) {
                 items(notices) { notice ->
                     NoticeItem(notice)
@@ -157,21 +164,34 @@ class NoticeActivity : ComponentActivity() {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
             ) {
+                val (content, time) = createRefs()
+
                 Text(
                     text = notice.content,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.constrainAs(content) {
+                        start.linkTo(parent.start)
+                        end.linkTo(time.start, 8.dp)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.wrapContent
+                    }
                 )
                 Text(
                     text = notice.createAt,
                     color = Color.LightGray,
-                    modifier = Modifier.padding(start = 8.dp),
-                    fontSize = 10.sp
+                    fontSize = 10.sp,
+                    modifier = Modifier.constrainAs(time) {
+                        end.linkTo(parent.end)
+                        bottom.linkTo(content.bottom)
+                    }
                 )
             }
         }

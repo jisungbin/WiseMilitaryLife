@@ -12,6 +12,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -126,7 +127,8 @@ class NoticeAddActivity : ComponentActivity() {
                 onValueChange = { titleField.value = it },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                colors = textFieldTheme
+                colors = textFieldTheme,
+                placeholder = { Text(text = "제목") }
             )
             Divider(modifier = Modifier.fillMaxWidth())
             TextField(
@@ -140,6 +142,7 @@ class NoticeAddActivity : ComponentActivity() {
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
+                placeholder = { Text(text = "본문") }
             )
         }
     }
