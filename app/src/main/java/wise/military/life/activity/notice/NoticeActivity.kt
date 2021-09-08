@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -115,7 +116,7 @@ class NoticeActivity : ComponentActivity() {
                             iterations = LottieConstants.IterateForever
                         )
                         Text(
-                            text = "공지가 비었어요",
+                            text = stringResource(R.string.activity_notice_empty),
                             fontSize = 20.sp
                         )
                     }

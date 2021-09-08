@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,7 +77,7 @@ class NoticeAddActivity : ComponentActivity() {
                             ).collect { uploadResult ->
                                 uploadResult.doWhen(
                                     onSuccess = {
-                                        toast("성공")
+                                        toast(getString(R.string.activity_notice_add_toast_success_post))
                                         finish()
                                     },
                                     onFail = { exception ->
@@ -91,7 +92,7 @@ class NoticeAddActivity : ComponentActivity() {
                             }
                         }
                     } else {
-                        toast("모두 입력해 주세요")
+                        toast(getString(R.string.activity_notice_add_toast_confirm_all_fields))
                     }
                 }) {
                     Icon(
@@ -128,7 +129,7 @@ class NoticeAddActivity : ComponentActivity() {
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 colors = textFieldTheme,
-                placeholder = { Text(text = "제목") }
+                placeholder = { Text(text = stringResource(R.string.activity_notice_add_placeholder_title)) }
             )
             Divider(modifier = Modifier.fillMaxWidth())
             TextField(
@@ -142,7 +143,7 @@ class NoticeAddActivity : ComponentActivity() {
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                placeholder = { Text(text = "본문") }
+                placeholder = { Text(text = stringResource(R.string.activity_notice_add_placeholder_content)) }
             )
         }
     }
