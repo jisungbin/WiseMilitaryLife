@@ -35,9 +35,12 @@
             android:name="wise.military.life.activity.notice.NoticeActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name="wise.military.life.activity.notice.NoticeAddActivity"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".activity.check.CheckVaccineActivity" />
         <activity android:name="wise.military.life.activity.MainActivity" />
-        <activity android:name="wise.military.life.activity.notice.NoticeAddActivity" />
         <activity android:name="wise.military.life.activity.notice.NoticeViewActivity" />
 
     </application>

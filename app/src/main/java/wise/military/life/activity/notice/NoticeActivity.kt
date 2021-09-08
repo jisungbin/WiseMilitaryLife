@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,8 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -45,6 +42,7 @@ import wise.military.life.R
 import wise.military.life.model.Notice
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
+import wise.military.life.util.config.IntentConfig
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.getUserId
 import wise.military.life.util.extension.isAdminId
@@ -152,9 +150,15 @@ class NoticeActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .clickable {
-                    // TODO
-                }
-                .padding(vertical = 4.dp, horizontal = 8.dp)
+                    startActivity(
+                        Intent(this, NoticeViewActivity::class.java).apply {
+                            putExtra(IntentConfig.NoticeTitle, notice.title)
+                            putExtra(IntentConfig.NoticeContent, notice.content)
+                            putExtra(IntentConfig.NoticeTime, notice.createAt)
+                        }
+                    )
+                },
+            verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             Text(
                 text = notice.title,
@@ -164,36 +168,20 @@ class NoticeActivity : ComponentActivity() {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                val (content, time) = createRefs()
-
-                Text(
-                    text = notice.content,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.constrainAs(content) {
-                        start.linkTo(parent.start)
-                        end.linkTo(time.start, 8.dp)
-                        width = Dimension.fillToConstraints
-                        height = Dimension.wrapContent
-                    }
-                )
-                Text(
-                    text = notice.createAt,
-                    color = Color.LightGray,
-                    fontSize = 10.sp,
-                    modifier = Modifier.constrainAs(time) {
-                        end.linkTo(parent.end)
-                        bottom.linkTo(content.bottom)
-                    }
-                )
-            }
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = notice.content,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Gray,
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End,
+                text = notice.createAt,
+                color = Color.LightGray,
+                fontSize = 13.sp
+            )
         }
     }
 }
