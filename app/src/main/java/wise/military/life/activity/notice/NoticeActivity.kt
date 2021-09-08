@@ -96,7 +96,7 @@ class NoticeActivity : ComponentActivity() {
                 onFail = { exception ->
                     toast(
                         getString(
-                            R.string.activity_notice_toast_error,
+                            R.string.activity_notice_toast_loading_error,
                             exception.getErrorMessage()
                         )
                     )
@@ -137,7 +137,7 @@ class NoticeActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 if (notices.isNotEmpty()) {
-                    items(items = notices.distinct(), key = { notice -> notice.id }) { notice ->
+                    items(items = notices.distinct(), key = { it.id }) { notice ->
                         if (isAdmin) {
                             AnimatedSwipeDismiss(
                                 item = notice,
@@ -162,11 +162,16 @@ class NoticeActivity : ComponentActivity() {
                                     noticeVm.delete(_notice.id).collect { deleteResult ->
                                         deleteResult.doWhen(
                                             onSuccess = {
-                                                toast("삭제 완료")
+                                                toast(getString(R.string.activity_notice_toast_deleted))
                                                 notices.remove(_notice)
                                             },
                                             onFail = { exception ->
-                                                toast(exception.getErrorMessage())
+                                                toast(
+                                                    getString(
+                                                        R.string.activity_notice_toast_delete_error,
+                                                        exception.getErrorMessage()
+                                                    )
+                                                )
                                             }
                                         )
                                     }
