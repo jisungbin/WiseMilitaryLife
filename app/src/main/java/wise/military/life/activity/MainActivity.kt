@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                         width = 200.dp,
                         height = 100.dp
                     ),
-                    onClick = { /*TODO*/ }
+                    onClick = { startActivity(CheckVaccineActivity::class.java) }
                 ) {
                     Text(
                         text = stringResource(R.string.activity_main_button_check_vaccine),
@@ -127,8 +127,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun <T> startActivity(clazz: Class<T>) {
-        startActivity(Intent(this@MainActivity, clazz).apply {
-            putExtra(IntentConfig.UserId, intent.getStringExtra(IntentConfig.UserId)!!)
-        })
+        startActivity(
+            Intent(this@MainActivity, clazz).apply {
+                putExtra(IntentConfig.UserId, intent.getStringExtra(IntentConfig.UserId)!!)
+            }
+        )
     }
 }
