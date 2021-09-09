@@ -1,6 +1,7 @@
 package wise.military.life.activity.check
 
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,9 +19,9 @@ class CheckViewModel : ViewModel() {
     private val now get() = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA).format(Date())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun temperature(_temperature: Temperature) = callbackFlow {
+    fun updateTemperature(_temperature: Temperature) = callbackFlow {
         val temperature = _temperature.copy(checkAt = now)
-        firestore.collection("temperature").add(temperature)
+        firestore.collection("temperature").document(temperature.userId).set(temperature)
             .addOnSuccessListener { trySend(FirebaseResult.Success(Unit)) }
             .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
 
@@ -28,10 +29,36 @@ class CheckViewModel : ViewModel() {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun vaccine(_vaccine: Vaccine) = callbackFlow {
+    fun updateVaccine(_vaccine: Vaccine) = callbackFlow {
         val vaccine = _vaccine.copy(checkAt = now)
-        firestore.collection("vaccine").add(vaccine)
+        firestore.collection("vaccine").document(vaccine.userId).set(vaccine)
             .addOnSuccessListener { trySend(FirebaseResult.Success(Unit)) }
+            .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
+
+        awaitClose { close() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getVaccine() = callbackFlow {
+        firestore.collection("vaccine").orderBy("checkAt", Query.Direction.DESCENDING).get()
+            .addOnSuccessListener { querySnapshot ->
+                val vaccines =
+                    querySnapshot.documents.mapNotNull { it.toObject(Vaccine::class.java) }
+                trySend(FirebaseResult.Success(vaccines))
+            }
+            .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
+
+        awaitClose { close() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getTemperature() = callbackFlow {
+        firestore.collection("temperature").orderBy("checkAt", Query.Direction.DESCENDING).get()
+            .addOnSuccessListener { querySnapshot ->
+                val temperature =
+                    querySnapshot.documents.mapNotNull { it.toObject(Temperature::class.java) }
+                trySend(FirebaseResult.Success(temperature))
+            }
             .addOnFailureListener { trySend(FirebaseResult.Fail(it)) }
 
         awaitClose { close() }

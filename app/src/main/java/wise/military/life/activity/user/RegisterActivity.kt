@@ -2,7 +2,6 @@ package wise.military.life.activity.user
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -62,7 +61,7 @@ import wise.military.life.model.toLevelString
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
-import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.exceptionToast
 import wise.military.life.util.extension.toast
 
 class RegisterActivity : ComponentActivity() {
@@ -253,13 +252,7 @@ class RegisterActivity : ComponentActivity() {
                                                 )
                                             },
                                             onFail = { exception ->
-                                                toast(
-                                                    message = getString(
-                                                        R.string.activity_register_toast_error,
-                                                        exception.getErrorMessage()
-                                                    ),
-                                                    length = Toast.LENGTH_LONG
-                                                )
+                                                exceptionToast("가입 중", exception)
                                             }
                                         )
                                     }

@@ -53,6 +53,7 @@ import wise.military.life.activity.MainActivity
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.config.IntentConfig
+import wise.military.life.util.extension.exceptionToast
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
 
@@ -192,13 +193,7 @@ class LoginActivity : ComponentActivity() {
                                             }
                                         },
                                         onFail = { exception ->
-                                            toast(
-                                                message = getString(
-                                                    R.string.activity_login_toast_error,
-                                                    exception.getErrorMessage()
-                                                ),
-                                                length = Toast.LENGTH_LONG
-                                            )
+                                            exceptionToast("로그인 중", exception)
                                         }
                                     )
                                 }

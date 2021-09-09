@@ -56,7 +56,7 @@ import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.composable.AnimatedSwipeDismiss
 import wise.military.life.util.config.IntentConfig
-import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.exceptionToast
 import wise.military.life.util.extension.getUserId
 import wise.military.life.util.extension.isAdminId
 import wise.military.life.util.extension.toast
@@ -94,12 +94,7 @@ class NoticeActivity : ComponentActivity() {
                     loadedAction(noticeList)
                 },
                 onFail = { exception ->
-                    toast(
-                        getString(
-                            R.string.activity_notice_toast_loading_error,
-                            exception.getErrorMessage()
-                        )
-                    )
+                    exceptionToast("공지를 불러오는 중", exception)
                     loadedAction(emptyList())
                 }
             )
@@ -166,12 +161,7 @@ class NoticeActivity : ComponentActivity() {
                                                 notices.remove(_notice)
                                             },
                                             onFail = { exception ->
-                                                toast(
-                                                    getString(
-                                                        R.string.activity_notice_toast_delete_error,
-                                                        exception.getErrorMessage()
-                                                    )
-                                                )
+                                                exceptionToast("공지를 삭제하는 중", exception)
                                             }
                                         )
                                     }

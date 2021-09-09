@@ -21,12 +21,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,9 +41,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import wise.military.life.R
@@ -47,23 +56,124 @@ import wise.military.life.model.Vaccine
 import wise.military.life.model.toVaccineString
 import wise.military.life.repo.doWhen
 import wise.military.life.theme.MaterialTheme
-import wise.military.life.util.extension.getErrorMessage
+import wise.military.life.util.extension.exceptionToast
 import wise.military.life.util.extension.getUserId
+import wise.military.life.util.extension.isAdminId
 import wise.military.life.util.extension.toast
 
 class CheckVaccineActivity : ComponentActivity() {
+    private val isAdmin by lazy { intent.getUserId().isAdminId() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             MaterialTheme {
-                Content()
+                if (isAdmin) {
+                    AdminContent()
+                } else {
+                    UserContent()
+                }
             }
         }
     }
 
     @Composable
-    private fun Content() {
+    private fun AdminContent() {
+        val checkVm: CheckViewModel = viewModel()
+        val vaccineList = remember { mutableStateListOf<Vaccine>() }
+
+        LaunchedEffect(Unit) {
+            checkVm.getVaccine().collect { tempResult ->
+                tempResult.doWhen(
+                    onSuccess = { _vaccineList ->
+                        vaccineList.addAll(_vaccineList)
+                    },
+                    onFail = { exception ->
+                        exceptionToast("백신 접종 목록을 불러오는 중", exception)
+                    }
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            if (vaccineList.isNotEmpty()) {
+                items(items = vaccineList.distinct()) { vaccine ->
+                    VaccineItem(vaccine = vaccine)
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val composition by rememberLottieComposition(
+                            LottieCompositionSpec.RawRes(R.raw.notice_empty)
+                        )
+                        LottieAnimation(
+                            modifier = Modifier.size(250.dp),
+                            composition = composition,
+                            iterations = LottieConstants.IterateForever
+                        )
+                        Text(
+                            text = stringResource(R.string.activity_check_vaccine_empty),
+                            fontSize = 20.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun VaccineItem(vaccine: Vaccine) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(color = Color.White),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = vaccine.type.toVaccineString(),
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${vaccine.count + 1}차",
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = vaccine.userId,
+                    color = Color.Gray
+                )
+                Text(
+                    text = vaccine.checkAt,
+                    color = Color.LightGray,
+                    fontSize = 13.sp
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun UserContent() {
         val checkVm: CheckViewModel = viewModel()
         val coroutineScope = rememberCoroutineScope()
         val vaccineTextShape = RoundedCornerShape(15.dp)
@@ -168,7 +278,7 @@ class CheckVaccineActivity : ComponentActivity() {
                     onClick = {
                         coroutineScope.launch {
                             if (selectedVaccineType != null && vaccineCount != null) {
-                                checkVm.vaccine(
+                                checkVm.updateVaccine(
                                     Vaccine(
                                         userId = intent.getUserId(),
                                         type = selectedVaccineType!!,
@@ -180,12 +290,7 @@ class CheckVaccineActivity : ComponentActivity() {
                                             toast(getString(R.string.activity_check_vaccine_toast_uploaded))
                                         },
                                         onFail = { exception ->
-                                            toast(
-                                                getString(
-                                                    R.string.activity_check_temp_toast_error,
-                                                    exception.getErrorMessage()
-                                                )
-                                            )
+                                            exceptionToast("등록중", exception)
                                         }
                                     )
                                 }

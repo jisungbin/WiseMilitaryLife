@@ -39,6 +39,7 @@ import wise.military.life.theme.MaterialTheme
 import wise.military.life.util.extension.getErrorMessage
 import wise.military.life.util.extension.toast
 import kotlin.random.Random
+import wise.military.life.util.extension.exceptionToast
 
 class NoticeAddActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,12 +81,7 @@ class NoticeAddActivity : ComponentActivity() {
                                         finish()
                                     },
                                     onFail = { exception ->
-                                        toast(
-                                            getString(
-                                                R.string.activity_notice_add_toast_error,
-                                                exception.getErrorMessage()
-                                            )
-                                        )
+                                        exceptionToast("공지를 등록하는 중", exception)
                                     }
                                 )
                             }
